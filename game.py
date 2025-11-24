@@ -27,6 +27,7 @@ class Game:
         self.commands["quit"] = quit
         go = Command("go", " <direction> : se déplacer dans une direction cardinale (N, E, S, O)", Actions.go, 1)
         self.commands["go"] = go
+    
         
         # Setup rooms
 
@@ -46,8 +47,8 @@ class Game:
         self.rooms.append(Blackmere)
         Grisepierre = Room("Grisepierre", "dans un Hameau minier hanté par un minerai étrange qui semble respirer.")
         self.rooms.append(Grisepierre)
-        Val-Cendré = Room("Val-Cendré", "dans une village couvert d’une cendre éternelle, marqué par un incendie surnaturel.")
-        self.rooms.append(Val-Cendré)
+        Val_Cendré = Room("Val-Cendré", "dans une village couvert d’une cendre éternelle, marqué par un incendie surnaturel.")
+        self.rooms.append(Val_Cendré)
         Ravenglade = Room("Ravenglade" , "dans un Hameau forestier envahi de corbeaux, où aucune naissance n’a eu lieu depuis des années.")
         self.rooms.append(Ravenglade)
         Sangrun = Room("Sangrun", "dans une grotte où réside les âmes tourmentées du village."         )
@@ -57,19 +58,16 @@ class Game:
         # Bloquer le passage direct entre Forest et Tower :
         # - forest.E ne mène plus à tower
         # - tower.O ne mène plus à forest
-        forest.exits = {"N" : cave, "E" : None, "S" : castle, "O" : mountain}
-        tower.exits = {"N" : cottage, "E" : beach, "S" : None, "O" : None}
-        cave.exits = {"N" : None, "E" : cottage, "S" : forest, "O" : None}
-        cottage.exits = {"N" : None, "E" : None, "S" : tower, "O" : cave}
-        swamp.exits = {"N" : tower, "E" : beach, "S" : None, "O" : castle}
-        castle.exits = {"N" : forest, "E" : swamp, "S" : None, "O" : None}
-        mountain.exits = {"N" : None, "E" : forest, "S" : None, "O" : None}
-        beach.exits = {"N" : None, "E" : None, "S" : None, "O" : None}
-
+        Verdenfall.exits = {"N" :Brunnhold , "E" : None, "S" : "Passage interdit" , "O" : None }
+        Brunnhold.exits = {"N" : None, "E" : None, "S" :Verdenfall , "O" :Mireval }
+        Mireval.exits = {"N" : Dornhollow, "E" : Brunnhold, "S" : None, "O" : None}
+        Dornhollow.exits = {"N" : None, "E" : Sangrun, "S" : Mireval , "O" : None }
+        # Sangrun : passage à sens unique. On peut y aller (depuis Dornhollow à l'O), mais on ne peut pas revenir au S vers Brunnhold
+        Sangrun.exits = {"N" : None, "E" : None, "S" :Brunnhold  , "O" : Dornhollow}
         # Setup player and starting room
 
         self.player = Player(input("\nEntrez votre nom: "))
-        self.player.current_room = swamp
+        self.player.current_room = Verdenfall
 
     # Play the game
     def play(self):
