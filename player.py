@@ -5,6 +5,7 @@ class Player():
     def __init__(self, name):
         self.name = name
         self.current_room = None
+        self.visited_rooms = []  # Liste pour tracker l'historique des pièces visitées
     
     # Define the move method.
     def move(self, direction):
@@ -26,7 +27,24 @@ class Player():
         
         # Set the current room to the next room.
         self.current_room = next_room
-        print(self.current_room.get_long_description())
+        # Ajoute l'objet Room à visited_rooms
+        if self.current_room not in self.visited_rooms:
+            self.visited_rooms.append(self.current_room)
         return True
-
     
+    # Define the get_history method.
+    def get_history(self):
+        """
+        Retourne une chaîne affichant les pièces déjà visitées.
+        Format conforme à l’énoncé du projet.
+        """
+        if len(self.visited_rooms) <= 1:
+            return ""  # rien à afficher si on n’a visité qu’une pièce
+    
+        history = "Vous avez déjà visité les pièces suivantes:\n"
+    
+        # On ne liste pas la pièce actuelle, uniquement les précédentes
+        for room in self.visited_rooms[:-1]:
+            history += f"  - {room.description}\n"
+    
+        return history

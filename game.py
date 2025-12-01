@@ -58,7 +58,7 @@ class Game:
         # Bloquer le passage direct entre Forest et Tower :
         # - forest.E ne mène plus à tower
         # - tower.O ne mène plus à forest
-        Verdenfall.exits = {"N" :Brunnhold , "E" : None, "S" : "Passage interdit" , "O" : None }
+        Verdenfall.exits = {"N" :Brunnhold , "E" : None, "S" : None , "O" : None }
         Brunnhold.exits = {"N" : None, "E" : None, "S" :Verdenfall , "O" :Mireval }
         Mireval.exits = {"N" : Dornhollow, "E" : Brunnhold, "S" : None, "O" : None}
         Dornhollow.exits = {"N" : None, "E" : Sangrun, "S" : Mireval , "O" : None }
