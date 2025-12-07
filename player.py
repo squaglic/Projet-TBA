@@ -6,6 +6,7 @@ class Player():
         self.name = name
         self.current_room = None
         self.visited_rooms = []  # Liste pour tracker l'historique des pièces visitées
+        self.inventory = {} # Dictionnaire de l'inventaire
     
     # Define the move method.
     def move(self, direction):
@@ -49,3 +50,16 @@ class Player():
             history += f"  - {room.description}\n"
     
         return history
+
+    # Define the get_inventory method.
+    def get_inventory(self):
+
+        # Test if the inventory is empty
+        if len(self.inventory) == 0:
+            return "\n Inventaire vide"
+        
+        inventory = "Items possédés : \n"
+
+        for item in self.inventory.values():
+            inventory += f"  - {item.name} : {item.description} \n"
+        return inventory
