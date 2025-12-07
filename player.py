@@ -21,15 +21,16 @@ class Player():
         # If the next room is None, print an error message and return False.
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
-            print(self.current_room.get_long_description())
             return False
         
         
         # Set the current room to the next room.
         self.current_room = next_room
+
         # Ajoute l'objet Room à visited_rooms
-        if self.current_room not in self.visited_rooms:
-            self.visited_rooms.append(self.current_room)
+        self.visited_rooms.append(self.current_room)
+        self.current_room = next_room
+        print(self.current_room.get_long_description())
         return True
     
     # Define the get_history method.
@@ -38,13 +39,13 @@ class Player():
         Retourne une chaîne affichant les pièces déjà visitées.
         Format conforme à l’énoncé du projet.
         """
-        if len(self.visited_rooms) <= 1:
+        if len(self.visited_rooms) == 0:
             return ""  # rien à afficher si on n’a visité qu’une pièce
     
         history = "Vous avez déjà visité les pièces suivantes:\n"
     
         # On ne liste pas la pièce actuelle, uniquement les précédentes
-        for room in self.visited_rooms[:-1]:
+        for room in self.visited_rooms:
             history += f"  - {room.description}\n"
     
         return history
