@@ -26,9 +26,11 @@ class Player():
         
         
         # Set the current room to the next room.
-        self.current_room = next_room
+        self.current_room = next_room 
 
-        # Ajoute l'objet Room à visited_rooms
+        
+        # déplacer le joueur vers la pièce suivante
+
         self.visited_rooms.append(self.current_room)
         self.current_room = next_room
         print(self.current_room.get_long_description())

@@ -147,3 +147,50 @@ class Actions:
             print("\t- " + str(command))
         print()
         return True
+    def back(game, list_of_words, number_of_parameters):
+        """
+        revenir à la pièce précédente (retour en arrière).
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi , False sinon.
+
+        Examples:
+
+        >>> from game import Game
+        >>> game = Game()
+        >>> game.setup()
+        >>> back(game, ["back"], 0)
+        True
+        >>> back(game, ["back", "N"], 0)
+        False
+        >>> back(game, ["back", "N", "E"], 0)
+        False
+
+        """
+
+        # Vérifier le nombre de paramètre.
+        l = len(list_of_words)
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG0.format(command_word=command_word))
+            return False
+        
+        player = game.player
+        if len(player.visited_rooms) < 2:
+            print("\nAucune pièce précédente à laquelle revenir.\n")
+            return False
+
+        # Revenir à la dernière pièce visitée
+        previous_room = player.visited_rooms.pop()
+        player.current_room = previous_room
+        print(player.current_room.get_long_description())
+        # Afficher l'historique des pièces visitées
+        history = player.get_history()
+        if history:
+            print(history)
+        return True

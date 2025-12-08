@@ -27,6 +27,8 @@ class Game:
         self.commands["quit"] = quit
         go = Command("go", " <direction> : se déplacer dans une direction cardinale (N, E, S, O)", Actions.go, 1)
         self.commands["go"] = go
+        back = Command("back", " : revenir à la pièce précédente", Actions.back, 0)
+        self.commands["back"] = back
     
         
         # Setup rooms
@@ -51,7 +53,7 @@ class Game:
         self.rooms.append(Val_Cendré)
         Ravenglade = Room("Ravenglade" , "un Hameau forestier envahi de corbeaux, où aucune naissance n’a eu lieu depuis des années.")
         self.rooms.append(Ravenglade)
-        Sangrun = Room("Sangrun", "une grotte où réside les âmes tourmentées du village."         )
+        Sangrun = Room("Sangrun", "une grotte où résident les âmes tourmentées du village."         )
         self.rooms.append(Sangrun)
         # Create exits for rooms
 
