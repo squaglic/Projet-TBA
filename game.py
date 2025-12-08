@@ -60,16 +60,22 @@ class Game:
         # Bloquer le passage direct entre Forest et Tower :
         # - forest.E ne mène plus à tower
         # - tower.O ne mène plus à forest
-        Verdenfall.exits = {"N" :Brunnhold , "E" : None, "S" : None , "O" : None }
-        Brunnhold.exits = {"N" : None, "E" : None, "S" :Verdenfall , "O" :Mireval }
-        Mireval.exits = {"N" : Dornhollow, "E" : Brunnhold, "S" : None, "O" : None}
-        Dornhollow.exits = {"N" : None, "E" : Sangrun, "S" : Mireval , "O" : None }
-        # Sangrun : passage à sens unique. On peut y aller (depuis Dornhollow à l'O), mais on ne peut pas revenir au S vers Brunnhold
-        Sangrun.exits = {"N" : None, "E" : None, "S" :Brunnhold  , "O" : Dornhollow}
+        Verdenfall.exits = {"N" : None , "E" : None, "S" : Sangrun , "O" : None }
+        Brunnhold.exits = {"N" : None, "E" : Blackmere, "S" : Eldregrove , "O" : Dornhollow }
+        Mireval.exits = {"N" : None, "E" : Sangrun, "S" : Stonebridge, "O" : None}
+        Dornhollow.exits = {"N" : Stonebridge, "E" : Val_Cendré, "S" : Brunnhold , "O" : None }
+        Sangrun.exits = {"N" : Verdenfall, "E" : None, "S" :Ravenglade  , "O" : Mireval}
+        Eldregrove.exits = {"N" : Brunnhold, "E" : None, "S" : None  , "O" : None}
+        Stonebridge.exits = {"N" : Mireval, "E" : None, "S" : Dornhollow  , "O" : None}
+        # Blackmere : passage à sens unique. On peut y aller depuis Brunnhold mais pas revenir en arrière.
+        Blackmere.exits = {"N" : Grisepierre, "E" : None, "S" : None  , "O" : Val_Cendré}
+        Grisepierre.exits = {"N" : None, "E" : None, "S" : Blackmere  , "O" : Ravenglade}
+        Val_Cendré.exits = {"N" : Ravenglade, "E" : Blackmere, "S" : None  , "O" : Dornhollow}
+        Ravenglade.exits = {"N" : Sangrun, "E" : Grisepierre, "S" : Val_Cendré  , "O" : None}
         # Setup player and starting room
 
         self.player = Player(input("\nEntrez votre nom: "))
-        self.player.current_room = Verdenfall
+        self.player.current_room = Eldregrove
 
     # Play the game
     def play(self):

@@ -25,14 +25,14 @@ class Player():
             return False
         
         
-        # Set the current room to the next room.
-        self.current_room = next_room 
-
         
         # déplacer le joueur vers la pièce suivante
 
         self.visited_rooms.append(self.current_room)
+
+        # Set the current room to the next room.
         self.current_room = next_room
+
         print(self.current_room.get_long_description())
         return True
     
