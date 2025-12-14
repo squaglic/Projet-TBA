@@ -43,6 +43,16 @@ class Room:
         self.name = name
         self.description = description
         self.exits = {}
+        self.items = []
+    
+    def add_item(self, item):
+        """Ajoute un item à la salle.
+
+        Args:
+            item (Item): L'objet `Item` à ajouter à la salle.
+        """
+        self.items.append(item)
+        
     
     def get_exit(self, direction):
 
