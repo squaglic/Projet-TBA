@@ -55,13 +55,24 @@ class Player():
 
     # Define the get_inventory method.
     def get_inventory(self):
-
+        """Retourne une chaîne représentant le contenu de l'inventaire du joueur.
+        
+        Format :
+            - Si inventaire vide : "Votre inventaire est vide."
+            - Si items : "Vous disposez des items suivants :\n  - item_name : description (poids kg)\n..."
+        
+        Returns:
+            str: Chaîne représentant l'inventaire
+        """
         # Test if the inventory is empty
         if len(self.inventory) == 0:
-            return "\n Inventaire vide"
+            return "Votre inventaire est vide."
         
-        inventory = "Items possédés : \n"
+        inventory = "Vous disposez des items suivants :\n"
 
         for item in self.inventory.values():
-            inventory += f"  - {item.name} : {item.description} \n"
+            inventory += f"  - {item.name} : {item.description} ({item.weight} kg)\n"
+        
         return inventory
+
+ 

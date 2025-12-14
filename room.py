@@ -84,4 +84,24 @@ class Room:
 
     def get_long_description(self):
         """Retourne la description complète de la salle, incluant les sorties."""
-        return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"
+        return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n \n{self.get_inventory()}"
+    def get_inventory(self):
+        """Retourne une chaîne représentant le contenu de la pièce.
+        
+        Format :
+            - Si pièce vide : "Il n'y a rien ici."
+            - Si items : "La pièce contient :\n  - item_name : description (poids kg)\n..."
+        
+        Returns:
+            str: Chaîne représentant le contenu de la pièce
+        """
+        # Test if the room is empty
+        if len(self.items) == 0:
+            return "Il n'y a rien ici."
+        
+        inventory = "La pièce contient :\n"
+
+        for item in self.items:
+            inventory += f"  - {item.name} : {item.description} ({item.weight} kg)\n"
+        
+        return inventory

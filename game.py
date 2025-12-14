@@ -34,7 +34,9 @@ class Game:
         # Setup rooms
 
         Eldregrove = Room("forêtd’Eldregrove","une forêt ancienne où les arbres semblent observer les voyageurs, et où la magie sauvage imprègne chaque souffle de vent.")
+        Eldregrove.items.append(Item("tes","test",1))
         self.rooms.append(Eldregrove)
+        
         Verdenfall = Room("Château de Verdenfall", "une ancienne couronne du royaume, ce château en ruines résonne encore des murmures d’un pouvoir oublié.")
         self.rooms.append(Verdenfall)
         Brunnhold = Room("Brunnhold", "un village partiellement ravagé, dont les habitants vivent dans une méfiance constante envers tout ce qui leur est étranger.")

@@ -1,20 +1,15 @@
 # Description: Item class
 
 class Item:
-    """
-    ff
-    
-    
-    
-    """
+    """Représente un item du jeu avec un nom, une description et un poids."""
 
     #Define the constructor
-    def __init__(self,name,description):
+    def __init__(self, name, description, weight=0):
         self.name = name
         self.description = description
-        sel.weight = weigth
+        self.weight = weight
 
     #Define the __str__() method
 
     def __str__(self):
-        return f"{self.name} : {self.description} ({self.weight }kg)"
+        return f"{self.name} : {self.description} ({self.weight} kg)"
