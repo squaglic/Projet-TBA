@@ -6,7 +6,7 @@ from room import Room
 from player import Player
 from command import Command
 from actions import Actions
-from item import Item
+
 class Game:
 
     # Constructor
@@ -34,9 +34,7 @@ class Game:
         # Setup rooms
 
         Eldregrove = Room("forêtd’Eldregrove","une forêt ancienne où les arbres semblent observer les voyageurs, et où la magie sauvage imprègne chaque souffle de vent.")
-        Eldregrove.items.append(Item("tes","test",1))
         self.rooms.append(Eldregrove)
-        
         Verdenfall = Room("Château de Verdenfall", "une ancienne couronne du royaume, ce château en ruines résonne encore des murmures d’un pouvoir oublié.")
         self.rooms.append(Verdenfall)
         Brunnhold = Room("Brunnhold", "un village partiellement ravagé, dont les habitants vivent dans une méfiance constante envers tout ce qui leur est étranger.")
@@ -57,7 +55,6 @@ class Game:
         self.rooms.append(Ravenglade)
         Sangrun = Room("Sangrun", "une grotte où résident les âmes tourmentées du village."         )
         self.rooms.append(Sangrun)
-        
         # Create exits for rooms
 
         # Bloquer le passage direct entre Forest et Tower :

@@ -43,16 +43,6 @@ class Room:
         self.name = name
         self.description = description
         self.exits = {}
-        self.items = []
-    
-    def add_item(self, item):
-        """Ajoute un item à la salle.
-
-        Args:
-            item (Item): L'objet `Item` à ajouter à la salle.
-        """
-        self.items.append(item)
-        
     
     def get_exit(self, direction):
 
@@ -84,24 +74,4 @@ class Room:
 
     def get_long_description(self):
         """Retourne la description complète de la salle, incluant les sorties."""
-        return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n \n{self.get_inventory()}"
-    def get_inventory(self):
-        """Retourne une chaîne représentant le contenu de la pièce.
-        
-        Format :
-            - Si pièce vide : "Il n'y a rien ici."
-            - Si items : "La pièce contient :\n  - item_name : description (poids kg)\n..."
-        
-        Returns:
-            str: Chaîne représentant le contenu de la pièce
-        """
-        # Test if the room is empty
-        if len(self.items) == 0:
-            return "Il n'y a rien ici."
-        
-        inventory = "La pièce contient :\n"
-
-        for item in self.items:
-            inventory += f"  - {item.name} : {item.description} ({item.weight} kg)\n"
-        
-        return inventory
+        return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"

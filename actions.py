@@ -181,13 +181,12 @@ class Actions:
             return False
         
         player = game.player
-        if len(player.visited_rooms) < 2:
+        if len(player.visited_rooms)  == 0:
             print("\nAucune pièce précédente à laquelle revenir.\n")
             return False
 
         # Revenir à la dernière pièce visitée
-        previous_room = player.visited_rooms.pop()
-        player.current_room = previous_room
+        player.current_room = player.visited_rooms.pop()
         print(player.current_room.get_long_description())
         # Afficher l'historique des pièces visitées
         history = player.get_history()
