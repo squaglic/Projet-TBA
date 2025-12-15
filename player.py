@@ -6,6 +6,8 @@ class Player():
         self.name = name
         self.current_room = None
         self.visited_rooms = []  # Liste pour tracker l'historique des pièces visitées
+        self.inventory = {}  # Inventaire du joueur
+        self.current_weight = 0  # Poids total de l'inventaire
         
     
     # Define the move method.
@@ -53,3 +55,5 @@ class Player():
             history += f"  - {room.description}\n"
     
         return history
+
+    

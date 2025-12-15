@@ -213,18 +213,117 @@ class Actions:
 
     def take(game, list_of_words, number_of_parameters):
         """
-        f
+        Prendre un item présent dans la room actuelle.
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi, False sinon.
         """
         player = game.player
-        room = game.room
+        room = player.current_room
+
+        # Vérifier le nombre de paramètres
+        l = len(list_of_words)
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG1.format(command_word=command_word))
+            return False
 
         item_name = list_of_words[1]
 
-        item = player.current_room.inventory.get(item_name)
+        # Vérifier si l'item existe dans la room
+        item = room.inventory.get(item_name)
+        if item is None:
+            print(f"\nL'objet '{item_name}' n'existe pas dans cette salle.\n")
+            return False
 
-
-        room.inventory[item_name] = item
+        # Ajouter l'item à l'inventaire du joueur
+        player.inventory[item_name] = item
         player.current_weight += item.weight
-        del player.current_room.inventory[item_name]
-        print(f"\nVous possédé pris l'objet '{item_name}'.\n")
+        
+        # Retirer l'item de l'inventaire de la room
+        del room.inventory[item_name]
+        room.current_weight -= item.weight
+        
+        print(f"\nVous avez pris l'objet '{item_name}'.\n")
+        return True
+
+    def check(game, list_of_words, number_of_parameters):
+        """
+        Vérifier l'inventaire du joueur.
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi, False sinon.
+        """
+        player = game.player
+
+        # Vérifier le nombre de paramètres
+        l = len(list_of_words)
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG0.format(command_word=command_word))
+            return False
+
+        # Afficher l'inventaire du joueur
+        if len(player.inventory) == 0:
+            print("\nVotre inventaire est vide.\n")
+            return True
+
+        print("\nVotre inventaire contient les objets suivants:")
+        for item in player.inventory.values():
+            print(f" - {item.name}: {item.description} (poids: {item.weight})")
+        print(f"\nPoids total de l'inventaire: {player.current_weight}\n")
+        return True
+
+    def drop(game, list_of_words, number_of_parameters):
+        """
+        Lâcher un item de l'inventaire du joueur dans la room actuelle.
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi, False sinon.
+        """
+        player = game.player
+        room = player.current_room
+
+        # Vérifier le nombre de paramètres
+        l = len(list_of_words)
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG1.format(command_word=command_word))
+            return False
+
+        item_name = list_of_words[1]
+
+        # Vérifier si l'item existe dans l'inventaire du joueur
+        item = player.inventory.get(item_name)
+        if item is None:
+            print(f"\nL'objet '{item_name}' n'existe pas dans votre inventaire.\n")
+            return False
+
+        # Ajouter l'item à l'inventaire de la room
+        room.inventory[item_name] = item
+        room.current_weight += item.weight
+        
+        # Retirer l'item de l'inventaire du joueur
+        del player.inventory[item_name]
+        player.current_weight -= item.weight
+        
+        print(f"\nVous avez lâché l'objet '{item_name}'.\n")
+        return True
+
+    
         
