@@ -147,6 +147,7 @@ class Actions:
             print("\t- " + str(command))
         print()
         return True
+
     def back(game, list_of_words, number_of_parameters):
         """
         revenir à la pièce précédente (retour en arrière).
@@ -193,3 +194,25 @@ class Actions:
         if history:
             print(history)
         return True
+
+    def look(game, list_of_words, number_of_parameters):
+        """
+        f
+        """
+
+        player = game.player
+        # If the number of parameters is incorrect, print an error message and return False.
+        l = len(list_of_words)
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG0.format(command_word=command_word))
+            return False
+
+        print(f"{player.current_room.get_long_description()} {player.current_room.get_inventory()}")
+        return True
+
+    def take(game, list_of_words, number_of_parameters):
+        """
+        f
+        """
+        

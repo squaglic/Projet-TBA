@@ -6,6 +6,7 @@ from room import Room
 from player import Player
 from command import Command
 from actions import Actions
+from item import Item
 
 class Game:
 
@@ -29,6 +30,8 @@ class Game:
         self.commands["go"] = go
         back = Command("back", " : revenir à la pièce précédente", Actions.back, 0)
         self.commands["back"] = back
+        look = Command("look", " : afficher la liste des items présents dans cette pièce", Actions.look, 0)
+        self.commands["look"] = look
     
         
         # Setup rooms
@@ -76,6 +79,13 @@ class Game:
 
         self.player = Player(input("\nEntrez votre nom: "))
         self.player.current_room = Eldregrove
+
+        #Setup item
+        épée = Item("épée", "Épée des Ténèbres", 2)
+
+        #Setup item location
+        Brunnhold.inventory["épée"] = épée
+
 
     # Play the game
     def play(self):

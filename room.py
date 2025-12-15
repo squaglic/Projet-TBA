@@ -43,6 +43,8 @@ class Room:
         self.name = name
         self.description = description
         self.exits = {}
+        self.inventory = {} # Dictionnaire de l'inventaire
+        self.current_weight = 0
     
     def get_exit(self, direction):
 
@@ -75,3 +77,18 @@ class Room:
     def get_long_description(self):
         """Retourne la description complète de la salle, incluant les sorties."""
         return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"
+
+
+        # Define the get_inventory method.
+    def get_inventory(self):
+
+        # Test if the inventory is empty
+        if len(self.inventory) == 0:
+            return "\n Inventaire vide"
+        
+        inventory = "Votre inventaire contient : \n"
+
+        for item in self.inventory.values():
+            inventory += f"\t - {item.name} : {item.description} ({item.weight} kg)\n"
+        inventory += f"\nVotre sac pèse {self.current_weight} kg\n"
+        return inventory
