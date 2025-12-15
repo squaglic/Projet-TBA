@@ -39,6 +39,8 @@ class Game:
         self.commands["check"] = check
         drop = Command("drop", " : déposer un Item de l'inventaire du joueur dans la zone où il se situe", Actions.drop, 1)
         self.commands["drop"] = drop
+        talk = Command("talk", " <nom> : parler à un personnage non-joueur (PNJ) présent dans la zone où se situe le joueur", Actions.talk, 1)
+        self.commands["talk"] = talk
     
         
         # Setup rooms
@@ -68,7 +70,7 @@ class Game:
 
         #Setup pnjs
         guardian = Character("Gardien", "Un vieux gardien mystérieux", Brunnhold, ["Bienvenue voyageur...", "Attention aux ombres qui rôdent dans ces terres!"])
-        Brunnhold.characters = {"Gardien": guardian}
+        Brunnhold.characters.append(guardian)
 
 
         # Create exits for rooms

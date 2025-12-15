@@ -34,6 +34,7 @@ class Character:
         self.description = description
         self.current_room = current_room
         self.msgs = msgs
+        self.msgs_cycle = list(msgs)  # Copie mutable pour le cycle des messages
     
     def __str__(self):
         """
@@ -55,6 +56,39 @@ class Character:
         if self.msgs:
             return random.choice(self.msgs)
         return ""
+    
+    def get_msg(self):
+        """
+        Affiche cycliquement les messages associés au personnage non-joueur.
+        
+        Cette méthode affiche les messages dans l'ordre, et une fois un message affiché,
+        il est supprimé de la liste. Quand tous les messages ont été affichés,
+        on recommence depuis le début (cycliquement).
+        
+        Returns:
+            str: Le message à afficher, ou une chaîne vide s'il n'y a aucun message.
+        
+        Exemple:
+            >>> from character import Character
+            >>> character = Character("Gandalf", "un magicien", None, ["Bienvenue!", "Au revoir!"])
+            >>> character.get_msg()
+            'Bienvenue!'
+            >>> character.get_msg()
+            'Au revoir!'
+            >>> character.get_msg()
+            'Bienvenue!'
+        """
+        # Si la liste cyclique est vide, la réinitialiser
+        if len(self.msgs_cycle) == 0:
+            self.msgs_cycle = list(self.msgs)
+        
+        # Si le personnage n'a pas de messages, retourner une chaîne vide
+        if len(self.msgs_cycle) == 0:
+            return ""
+        
+        # Récupérer et supprimer le premier message
+        msg = self.msgs_cycle.pop(0)
+        return msg
     
     def move_pnj(self):
         """

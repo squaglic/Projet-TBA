@@ -347,5 +347,45 @@ class Actions:
         print(f"\nVous avez lâché l'objet '{item_name}'.\n")
         return True
 
+    def talk(game, list_of_words, number_of_parameters):
+        """
+        Parler à un personnage non-joueur (PNJ) présent dans la salle actuelle.
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi, False sinon.
+        """
+        player = game.player
+        room = player.current_room
+
+        # Vérifier le nombre de paramètres
+        l = len(list_of_words)
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG1.format(command_word=command_word))
+            return False
+
+        character_name = list_of_words[1]
+
+        # Vérifier s'il y a un personnage avec ce nom dans la room
+        character = None
+        for char in room.characters:
+            if char.name.lower() == character_name.lower():
+                character = char
+                break
+
+        if character is None:
+            print(f"\n'{character_name}' ne se trouve pas ici.\n")
+            return False
+
+        # Afficher le message du personnage
+        msg = character.get_msg()
+        print(f"\n{character.name} : {msg}\n")
+        return True
+
     
         
