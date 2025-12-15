@@ -194,3 +194,184 @@ class Actions:
         if history:
             print(history)
         return True
+    def look (game, list_of_words, number_of_parameters):
+        """
+        Affiche la description complète de la pièce actuelle.
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi , False sinon.
+
+        Examples:
+
+        >>> from game import Game
+        >>> game = Game()
+        >>> game.setup()
+        >>> look(game, ["look"], 0)
+        True
+        >>> look(game, ["look", "N"], 0)
+        False
+        >>> look(game, ["look", "N", "E"], 0)
+        False
+
+        """
+
+        # Vérifier le nombre de paramètre.
+        l = len(list_of_words)
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG0.format(command_word=command_word))
+            return False
+        
+        player = game.player
+        print(player.current_room.get_long_description())
+        return True
+        # affcher les objets dans la pièce actuelle
+        if curruent_room.items:
+            print("\nOn voit:")
+            for item in current_room.items:
+                print(f" - {item.name} : {item.description} ({item.weight} kg)")
+        else:
+            print("\nIl n'y a rien ici.")
+        print()
+        return True
+
+    def check(game, list_of_words, number_of_parameters):
+        """
+        Vérifie le contenu de l'inventaire du joueur.
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi , False sinon.
+
+        Examples:
+
+        >>> from game import Game
+        >>> game = Game()
+        >>> game.setup()
+        >>> check(game, ["check"], 0)
+        True
+        >>> check(game, ["check", "N"], 0)
+        False
+        >>> check(game, ["check", "N", "E"], 0)
+        False
+
+        """
+
+        # Vérifier le nombre de paramètre.
+        l = len(list_of_words)
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG0.format(command_word=command_word))
+            return False
+        
+        player = game.player
+        print("\n" + player.get_inventory() +"\n")
+        return True
+
+
+
+    def take(game, list_of_words, number_of_parameters):
+    # prendre un objet dans la pièce 
+        """
+        Prendre un objet dans la pièce actuelle et l'ajouter à l'inventaire du joueur.
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi , False sinon.
+
+        Examples:
+
+        >>> from game import Game
+        >>> game = Game()
+        >>> game.setup()
+        >>> take(game, ["take", "sword"], 1)
+        True
+        >>> take(game, ["take"], 1)
+        False
+        >>> take(game, ["take", "sword", "shield"], 1)
+        False
+
+        """
+
+        l= len(list_of_words)
+        player= game.player
+        current_room= player.current_room
+        if l < 2: 
+            print("\n")
+    
+    def drop (game, list_of_words, number_of_parameters):
+    # déposer un objet dans la pièce actuelle depuis l'inventaire du joueur
+        """
+        Déposer un objet de l'inventaire du joueur dans la pièce actuelle.
+
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+
+        Returns:
+            bool: True si l'action a réussi , False sinon.
+
+        Examples:
+
+        >>> from game import Game
+        >>> game = Game()
+        >>> game.setup()
+        >>> drop(game, ["drop", "sword"], 1)
+        True
+        >>> drop(game, ["drop"], 1)
+        False
+        >>> drop(game, ["drop", "sword", "shield"], 1)
+        False
+
+        """
+
+        l= len(list_of_words)
+        player= game.player
+        current_room= player.current_room
+        # on vérifie ici le nombre de paramètres 
+        if l!= number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(f"\n La commande '{command_word}' prend 1 seul paramètre.\n")
+            return False
+        
+        # on vérifie si un nom d'objet a été fourni
+        if l < 2:
+            print("\nVeuillez spécifier le nom de l'objet à déposer.\n")
+            return False
+        item_name = " ".join(list_of_words[1:])
+
+        # on vérifie si l'objet est dans l'inventaire du joueur
+        item_to_drop = None
+        exact_key = None
+        for key, item in player.inventory.items():
+            if item.name.lower() == item_name.lower():
+                item_to_drop = item
+                exact_key = key
+                break
+                
+        # si l'objet n'est pas trouvé dans l'inventaire
+        if item_to_drop is None:
+            print(f"\nVous n'avez pas '{item_name}' dans votre inventaire.\n")
+            return False
+        # on dépose l'objet dans la pièce actuelle
+
+        current_room.items.append(item_to_drop)
+        # on le retire de l'inventaire du joueur
+
+        del player.inventory[exact_key]
+        print(f"\nVous avez déposé '{item_to_drop.name}' dans la pièce.\n")
+        return True

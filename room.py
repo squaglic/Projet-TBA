@@ -84,6 +84,10 @@ class Room:
 
     def get_long_description(self):
         """Retourne la description complète de la salle, incluant les sorties."""
+       
+        # Afficher les sorties
+        
+    
         return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n \n{self.get_inventory()}"
     def get_inventory(self):
         """Retourne une chaîne représentant le contenu de la pièce.

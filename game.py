@@ -29,17 +29,24 @@ class Game:
         self.commands["go"] = go
         back = Command("back", " : revenir à la pièce précédente", Actions.back, 0)
         self.commands["back"] = back
-    
+        look = Command("look", " : observer la pièce actuelle", Actions.look, 0)
+        self.commands["look"] = look
+        check = Command("check", " : vérifier l'inventaire", Actions.check, 0)
+        self.commands["check"] = check
+        drop = Command("drop", " <nom_de_l'objet> : déposer un objet de l'inventaire dans la pièce actuelle", Actions.drop, 1)
+        self.commands["drop"] = drop
+        take = Command("take", " <nom_de_l'objet> : prendre un objet de la pièce actuelle et le mettre dans l'inventaire", Actions.take, 1)
+        self.commands["take"] = take
         
         # Setup rooms
 
         Eldregrove = Room("forêtd’Eldregrove","une forêt ancienne où les arbres semblent observer les voyageurs, et où la magie sauvage imprègne chaque souffle de vent.")
-        Eldregrove.items.append(Item("tes","test",1))
         self.rooms.append(Eldregrove)
         
         Verdenfall = Room("Château de Verdenfall", "une ancienne couronne du royaume, ce château en ruines résonne encore des murmures d’un pouvoir oublié.")
         self.rooms.append(Verdenfall)
         Brunnhold = Room("Brunnhold", "un village partiellement ravagé, dont les habitants vivent dans une méfiance constante envers tout ce qui leur est étranger.")
+        Brunnhold.items.append(Item("lame_éclipsée","test",1))
         self.rooms.append(Brunnhold)
         Mireval = Room("Mireval", "un Hameau noyé dans une brume perpétuelle, marqué par une étrange épidémie que nul ne parvient à comprendre.")
         self.rooms.append(Mireval)
