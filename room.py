@@ -84,9 +84,9 @@ class Room:
 
         # Test if the inventory is empty
         if len(self.inventory) == 0:
-            return "\n Inventaire vide"
+            return "\n Pas d'objet à proximité"
         
-        inventory = "Votre inventaire contient : \n"
+        inventory = " Objet(s) à proximité : \n"
 
         for item in self.inventory.values():
             inventory += f"\t - {item.name} : {item.description} ({item.weight} kg)\n"

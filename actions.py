@@ -215,4 +215,16 @@ class Actions:
         """
         f
         """
+        player = game.player
+        room = game.room
+
+        item_name = list_of_words[1]
+
+        item = player.current_room.inventory.get(item_name)
+
+
+        room.inventory[item_name] = item
+        player.current_weight += item.weight
+        del player.current_room.inventory[item_name]
+        print(f"\nVous possédé pris l'objet '{item_name}'.\n")
         

@@ -30,8 +30,10 @@ class Game:
         self.commands["go"] = go
         back = Command("back", " : revenir à la pièce précédente", Actions.back, 0)
         self.commands["back"] = back
-        look = Command("look", " : afficher la liste des items présents dans cette pièce", Actions.look, 0)
+        look = Command("look", " : afficher la liste des items présents dans la zone où se situe le joueur", Actions.look, 0)
         self.commands["look"] = look
+        take = Command("take", " : prendre un Item présent dans la zone où se situe le joueur", Actions.take, 1)
+        self.commands["take"] = take
     
         
         # Setup rooms
