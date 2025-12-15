@@ -197,7 +197,24 @@ class Actions:
 
     def look(game, list_of_words, number_of_parameters):
         """
-        f
+        Regarder autour de soi dans la pièce actuelle.
+        Affiche la description de la salle, les items et les personnages présents.
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Les mots de la commande.
+            number_of_parameters (int): le nombre de paramètre attendu.
+        Returns:
+            bool: True si l'action a réussi, False sinon.
+        Examples:
+        >>> from game import Game
+        >>> game = Game()
+        >>> game.setup()
+        >>> look(game, ["look"], 0)
+        True
+        >>> look(game, ["look", "N"], 0)
+        False
+        >>> look(game, ["look", "N", "E"], 0)
+        False
         """
 
         player = game.player
@@ -208,8 +225,13 @@ class Actions:
             print(MSG0.format(command_word=command_word))
             return False
 
-        print(f"{player.current_room.get_long_description()} {player.current_room.get_inventory()}")
+        room = player.current_room
+        output = room.get_long_description()
+        output += room.get_inventory()
+        output += room.get_characters()
+        print(output)
         return True
+
 
     def take(game, list_of_words, number_of_parameters):
         """

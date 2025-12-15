@@ -7,6 +7,7 @@ from player import Player
 from command import Command
 from actions import Actions
 from item import Item
+from character import Character
 
 class Game:
 
@@ -64,6 +65,12 @@ class Game:
         self.rooms.append(Ravenglade)
         Sangrun = Room("Sangrun", "une grotte où résident les âmes tourmentées du village."         )
         self.rooms.append(Sangrun)
+
+        #Setup pnjs
+        guardian = Character("Gardien", "Un vieux gardien mystérieux", Brunnhold, ["Bienvenue voyageur...", "Attention aux ombres qui rôdent dans ces terres!"])
+        Brunnhold.characters = {"Gardien": guardian}
+
+
         # Create exits for rooms
 
         # Bloquer le passage direct entre Forest et Tower :
