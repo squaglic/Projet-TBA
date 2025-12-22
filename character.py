@@ -90,7 +90,7 @@ class Character:
         msg = self.msgs_cycle.pop(0)
         return msg
     
-    def move(self):
+    def move_pnj(self):
         """
         Déplace le personnage non-joueur de manière aléatoire.
         
@@ -107,7 +107,7 @@ class Character:
             >>> room2 = Room("Castle", "un château")
             >>> room1.exits = {"N": room2, "E": None, "S": None, "O": None}
             >>> character = Character("Gandalf", "un magicien", room1, ["Salut!"])
-            >>> moved = character.move()
+            >>> moved = character.move_pnj()
             >>> moved in [True, False]
             True
         """

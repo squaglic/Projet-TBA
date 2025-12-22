@@ -71,6 +71,8 @@ class Game:
         Sangrun = Room("Sangrun", "une grotte où résident les âmes tourmentées du village."         )
         self.rooms.append(Sangrun)
 
+
+
         #Setup pnjs
         guardian = Character("Gardien", "Un vieux gardien mystérieux", Brunnhold, ["Bienvenue voyageur, je suis le gardien de ce village.", "Attention aux ombres qui rôdent dans ces terres!"])
         Brunnhold.characters.append(guardian)
