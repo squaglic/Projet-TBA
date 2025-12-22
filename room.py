@@ -45,6 +45,7 @@ class Room:
         self.exits = {}
         self.inventory = {} # Dictionnaire de l'inventaire
         self.current_weight = 0
+        self.characters = []  # Liste des personnages présents dans la salle
     
     def get_exit(self, direction):
 
@@ -92,3 +93,14 @@ class Room:
             inventory += f"\t - {item.name} : {item.description} ({item.weight} kg)\n"
         inventory += f"\nVotre sac pèse {self.current_weight} kg\n"
         return inventory
+
+    def get_characters(self):
+        """Retourne une chaîne listant les personnages présents dans la salle."""
+        # Test if there are no characters
+        if len(self.characters) == 0:
+            return ""
+        
+        characters_str = "\nPersonnage(s) présent(s) : \n"
+        for character in self.characters:
+            characters_str += f"\t - {character}\n"
+        return characters_str

@@ -1,5 +1,8 @@
 # Description: Game class
 
+# Debug mode
+DEBUG = False
+
 # Import modules
 
 from room import Room
@@ -7,6 +10,7 @@ from player import Player
 from command import Command
 from actions import Actions
 from item import Item
+from character import Character
 
 class Game:
 
@@ -38,6 +42,8 @@ class Game:
         self.commands["check"] = check
         drop = Command("drop", " : déposer un Item de l'inventaire du joueur dans la zone où il se situe", Actions.drop, 1)
         self.commands["drop"] = drop
+        talk = Command("talk", " <nom> : parler à un personnage non-joueur (PNJ) présent dans la zone où se situe le joueur", Actions.talk, 1)
+        self.commands["talk"] = talk
     
         
         # Setup rooms
@@ -64,6 +70,12 @@ class Game:
         self.rooms.append(Ravenglade)
         Sangrun = Room("Sangrun", "une grotte où résident les âmes tourmentées du village."         )
         self.rooms.append(Sangrun)
+
+        #Setup pnjs
+        guardian = Character("Gardien", "Un vieux gardien mystérieux", Brunnhold, ["Bienvenue voyageur, je suis le gardien de ce village.", "Attention aux ombres qui rôdent dans ces terres!"])
+        Brunnhold.characters.append(guardian)
+
+
         # Create exits for rooms
 
         # Bloquer le passage direct entre Forest et Tower :
@@ -88,9 +100,14 @@ class Game:
 
         #Setup item
         épée = Item("épée", "Épée des Ténèbres", 2)
+        Masque_anti_brume = Item("masque", "Masque anti-brume", 1)
+        filet = Item("filet", "Filet de pêche renforcé", 3) 
+
 
         #Setup item location
         Brunnhold.inventory["épée"] = épée
+        Mireval.inventory["masque"] = Masque_anti_brume
+        Blackmere.inventory["filet"] = filet
 
 
     # Play the game
