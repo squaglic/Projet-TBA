@@ -90,48 +90,38 @@ class Character:
         msg = self.msgs_cycle.pop(0)
         return msg
     
-    def move_pnj(self):
+    def move(self):
         """
-        Déplace le personnage non-joueur de manière aléatoire.
+        Déplace le personnage dans une pièce adjacente au hasard avec une probabilité de 50%.
         
-        Le personnage a une chance sur deux de se déplacer vers une salle adjacente.
-        S'il se déplace, il choisit une direction aléatoire parmi celles disponibles.
+        À chaque appel :
+        - Le personnage a une chance sur deux de se déplacer ou de rester sur place
+        - S'il se déplace, il va dans une pièce adjacente au hasard
         
         Returns:
             bool: True si le personnage s'est déplacé, False sinon.
         
         Exemple:
-            >>> from room import Room
             >>> from character import Character
-            >>> room1 = Room("Forest", "une forêt")
-            >>> room2 = Room("Castle", "un château")
-            >>> room1.exits = {"N": room2, "E": None, "S": None, "O": None}
-            >>> character = Character("Gandalf", "un magicien", room1, ["Salut!"])
-            >>> moved = character.move_pnj()
-            >>> moved in [True, False]
-            True
+            >>> from room import Room
+            >>> room1 = Room("Salle 1", "Une salle")
+            >>> room2 = Room("Salle 2", "Une autre salle")
+            >>> room1.exits = {"nord": room2}
+            >>> character = Character("Gardien", "Un gardien", room1, ["Bonjour"])
+            >>> character.move()  # Retourne True ou False
         """
         import random
         
-        # Chance sur deux de se déplacer
-        if random.random() > 0.5:
-            # Le personnage reste sur place
-            return False
+        # Le personnage a une chance sur deux de se déplacer
+        if random.choice([True, False]):
+            # Vérifier qu'il y a des sorties disponibles
+            if self.current_room and self.current_room.exits:
+                # Filtrer les sorties pour ne garder que les vraies salles (pas None)
+                exit_rooms = [room for room in self.current_room.exits.values() if room is not None]
+                # Vérifier qu'il y a au moins une sortie valide
+                if exit_rooms:
+                    self.current_room = random.choice(exit_rooms)
+                    return True
         
-        # Le personnage se déplace
-        # Récupérer toutes les directions disponibles (N, E, S, O)
-        directions = ["N", "E", "S", "O"]
-        
-        # Choisir une direction aléatoire
-        direction = random.choice(directions)
-        
-        # Vérifier que la salle existe dans cette direction
-        next_room = self.current_room.exits.get(direction)
-        
-        # Si la salle n'existe pas ou est bloquée, rester sur place
-        if next_room is None or next_room == "passage interdit":
-            return False
-        
-        # Se déplacer vers la nouvelle salle
-        self.current_room = next_room
-        return True
+        # Le personnage ne se déplace pas
+        return False

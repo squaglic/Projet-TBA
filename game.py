@@ -84,16 +84,16 @@ class Game:
         # - forest.E ne mène plus à tower
         # - tower.O ne mène plus à forest
         Verdenfall.exits = {"N" : None , "E" : None, "S" : Sangrun , "O" : None }
-        Brunnhold.exits = {"N" : None, "E" : Blackmere, "S" : Eldregrove , "O" : Dornhollow }
+        Brunnhold.exits = {"N" : Dornhollow, "E" : Blackmere, "S" : Eldregrove , "O" : None }
         Mireval.exits = {"N" : None, "E" : Sangrun, "S" : Stonebridge, "O" : None}
         Dornhollow.exits = {"N" : Stonebridge, "E" : Val_Cendré, "S" : Brunnhold , "O" : None }
         Sangrun.exits = {"N" : Verdenfall, "E" : None, "S" :Ravenglade  , "O" : Mireval}
         Eldregrove.exits = {"N" : Brunnhold, "E" : None, "S" : None  , "O" : None}
         Stonebridge.exits = {"N" : Mireval, "E" : None, "S" : Dornhollow  , "O" : None}
         # Blackmere : passage à sens unique. On peut y aller depuis Brunnhold mais pas revenir en arrière.
-        Blackmere.exits = {"N" : Grisepierre, "E" : None, "S" : None  , "O" : Val_Cendré}
+        Blackmere.exits = {"N" : Grisepierre, "E" : None, "S" : None  , "O" : None}
         Grisepierre.exits = {"N" : None, "E" : None, "S" : Blackmere  , "O" : Ravenglade}
-        Val_Cendré.exits = {"N" : Ravenglade, "E" : Blackmere, "S" : None  , "O" : Dornhollow}
+        Val_Cendré.exits = {"N" : Ravenglade, "E" : None, "S" : None  , "O" : Dornhollow}
         Ravenglade.exits = {"N" : Sangrun, "E" : Grisepierre, "S" : Val_Cendré  , "O" : None}
         # Setup player and starting room
 
@@ -137,6 +137,38 @@ class Game:
         else:
             command = self.commands[command_word]
             command.action(self, list_of_words, command.number_of_parameters)
+        
+        # Déplacer tous les personnages non-joueurs après chaque commande
+        self.move_characters()
+
+    def move_characters(self):
+        """
+        Déplace tous les personnages non-joueurs présents dans le jeu.
+        Affiche un message si un personnage se déplace dans ou hors de la salle du joueur.
+        """
+        player_room = self.player.current_room
+        
+        # Parcourir toutes les salles pour trouver les personnages
+        for room in self.rooms:
+            # Créer une copie de la liste des personnages pour éviter les problèmes de modification pendant l'itération
+            characters_in_room = list(room.characters)
+            for character in characters_in_room:
+                old_room = character.current_room
+                # Déplacer le personnage
+                moved = character.move()
+                
+                if moved:
+                    new_room = character.current_room
+                    # Retirer le personnage de l'ancienne salle
+                    old_room.characters.remove(character)
+                    # Ajouter le personnage à la nouvelle salle
+                    new_room.characters.append(character)
+                    
+                    # Afficher un message si le joueur est concerné
+                    if old_room == player_room:
+                        print(f"\n{character.name} quitte la salle.\n")
+                    elif new_room == player_room:
+                        print(f"\n{character.name} entre dans la salle.\n")
 
     # Print the welcome message
     def print_welcome(self):
