@@ -179,6 +179,16 @@ class Game:
 
         print(self.player.current_room.get_long_description())
 
+    def win(self):
+        """End the game with a win message."""
+        print("\nFélicitations ! Vous avez accompli toutes les quêtes et gagné le jeu !")
+        self.finished = True
+
+    def loose(self):
+        """End the game with a lose message."""
+        print("\nDommage ! Vous avez échoué dans vos quêtes. Essayez à nouveau !")
+        self.finished = True
+
 
 def main():
     """Create a game object and play the game"""
