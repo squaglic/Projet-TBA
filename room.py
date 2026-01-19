@@ -39,13 +39,14 @@ class Room:
         True
     """
 
-    def __init__(self, name, description):
+    def __init__(self, name, description, image=None):
         self.name = name
         self.description = description
         self.exits = {}
         self.inventory = {} # Dictionnaire de l'inventaire
         self.current_weight = 0
         self.characters = []  # Liste des personnages présents dans la salle
+        self.image = image  # Path to image file (PNG/JPG) for this room
     
     def get_exit(self, direction):
 
