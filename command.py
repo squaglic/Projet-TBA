@@ -1,45 +1,31 @@
-# This file contains the Command class.
+"""Module contenant la classe `Command`.
+
+Ce module gère les commandes du jeu d'aventure. Chaque commande est représentée
+par un mot-clé, une chaîne d'aide, une fonction d'action associée et le nombre
+de paramètres requis.
+"""
+
 
 class Command:
-    """
-    This class represents a command. A command is composed of a command word, a help string, an action and a number of parameters.
+    """Représente une commande exécutable du jeu.
+
+    Une commande est composée d'un mot-clé (ex: "go", "help"), d'une description
+    d'aide, d'une fonction action à exécuter et du nombre de paramètres attendus.
 
     Attributes:
-        command_word (str): The command word.
-        help_string (str): The help string.
-        action (function): The action to execute when the command is called.
-        number_of_parameters (int): The number of parameters expected by the command.
-
-    Methods:
-        __init__(self, command_word, help_string, action, number_of_parameters) : The constructor.
-        __str__(self) : The string representation of the command.
-
-    Examples:
-
-    >>> from actions import go
-    >>> command = Command("go", "Permet de se déplacer dans une direction.", go, 1)
-    >>> command.command_word
-    'go'
-    >>> command.help_string
-    'Permet de se déplacer dans une direction.'
-    >>> type(command.action)
-    <class 'function'>
-    >>> command.number_of_parameters
-    1
-
+        command_word (str): Le mot-clé de la commande.
+        help_string (str): La chaîne d'aide décrivant la commande.
+        action: La fonction à exécuter pour cette commande.
+        number_of_parameters (int): Le nombre de paramètres requis.
     """
 
-    # The constructor.
     def __init__(self, command_word, help_string, action, number_of_parameters):
         self.command_word = command_word
         self.help_string = help_string
         self.action = action
         self.number_of_parameters = number_of_parameters
-    
+
     # The string representation of the command.
     def __str__(self):
         return  self.command_word \
                 + self.help_string
-    
-
-

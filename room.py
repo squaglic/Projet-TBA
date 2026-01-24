@@ -43,11 +43,11 @@ class Room:
         self.name = name
         self.description = description
         self.exits = {}
-        self.inventory = {} # Dictionnaire de l'inventaire
+        self.inventory = {}
         self.current_weight = 0
-        self.characters = []  # Liste des personnages présents dans la salle
-        self.image = image  # Path to image file (PNG/JPG) for this room
-    
+        self.characters = []
+        self.image = image
+
     def get_exit(self, direction):
 
         """Retourne la salle reliée par la sortie `direction`.
@@ -61,15 +61,14 @@ class Room:
         """
         if direction in self.exits.keys():
             return self.exits[direction]
-        else:
-            return "passage interdit"
-    
+        return "passage interdit"
+
     def get_exit_string(self):
         """Retourne une chaîne décrivant les sorties disponibles.
 
         Ne liste que les directions qui pointent vers une salle (non-None).
         """
-        exit_string = "Sorties: " 
+        exit_string = "Sorties: "
         for exit in self.exits.keys():
             if self.exits.get(exit) is not None:
                 exit_string += exit + ", "
@@ -80,14 +79,19 @@ class Room:
         """Retourne la description complète de la salle, incluant les sorties."""
         return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"
 
-
-        # Define the get_inventory method.
     def get_inventory(self):
+        """Retourne une chaîne décrivant les objets présents dans la salle.
 
+        Affiche la liste des objets disponibles avec leur description et poids.
+        Retourne un message si aucun objet n'est présent.
+
+        Returns:
+            str: Description des objets à proximité ou message "Pas d'objet".
+        """
         # Test if the inventory is empty
         if len(self.inventory) == 0:
             return "\n Pas d'objet à proximité"
-        
+
         inventory = " Objet(s) à proximité : \n"
 
         for item in self.inventory.values():
@@ -100,7 +104,7 @@ class Room:
         # Test if there are no characters
         if len(self.characters) == 0:
             return ""
-        
+
         characters_str = "\nPersonnage(s) présent(s) : \n"
         for character in self.characters:
             characters_str += f"\t - {character}\n"

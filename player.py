@@ -1,23 +1,68 @@
-# Define the Player class.
+"""Module contenant la classe `Player`.
+
+Ce module gère le joueur du jeu d'aventure, y compris ses déplacements,
+son inventaire, ses récompenses et ses quêtes.
+"""
 
 from quest import QuestManager
 
 class Player():
+    """
+    Représente le joueur du jeu d'aventure.
+    
+    Attributes:
+        name (str): Le nom du joueur.
+        current_room (Room): La salle actuellement occupée par le joueur.
+        visited_rooms (list): Historique des salles visitées.
+        inventory (dict): Dictionnaire des objets possédés par le joueur.
+        current_weight (float): Poids total de l'inventaire en kg.
+        move_count (int): Nombre de déplacements effectués.
+        quest_manager (QuestManager): Gestionnaire des quêtes du joueur.
+        rewards (list): Liste des récompenses obtenues.
+    
+    Methods:
+        __init__(name): Initialise le joueur avec un nom.
+        move(direction): Déplace le joueur dans une direction cardinale.
+        add_reward(reward): Ajoute une récompense à la liste.
+        show_rewards(): Affiche toutes les récompenses obtenues.
+        get_history(): Retourne l'historique des salles visitées.
+    """
 
-    # Define the constructor.
     def __init__(self, name):
+        """
+        Initialise un joueur avec un nom donné.
+        
+        Args:
+            name (str): Le nom du joueur.
+        
+        Crée les structures de base : inventaire vide, liste de salles visitées,
+        quêtes et récompenses vides.
+        """
         self.name = name
         self.current_room = None
-        self.visited_rooms = []  # Liste pour tracker l'historique des pièces visitées
-        self.inventory = {}  # Inventaire du joueur
-        self.current_weight = 0  # Poids total de l'inventaire
-        self.move_count = 0  # Compteur de déplacements
+        self.visited_rooms = []
+        self.inventory = {}
+        self.current_weight = 0
+        self.move_count = 0
         self.quest_manager = QuestManager(self)
-        self.rewards = []  # List to store earned rewards
-        
-    
-    # Define the move method.
+        self.rewards = []
+
     def move(self, direction):
+        """
+        Déplace le joueur dans la direction cardinale spécifiée.
+        
+        Args:
+            direction (str): Direction cardinale (N, E, S, O).
+        
+        Returns:
+            bool: True si le déplacement a été effectué avec succès, False sinon.
+        
+        Cette méthode :
+        - Récupère la salle adjacente dans la direction donnée
+        - Ajoute la salle actuelle à l'historique
+        - Met à jour la salle actuelle du joueur
+        - Vérifie les objectifs de quête (visite de salle, compteur de déplacement)
+        """
         # Get the next room from the exits dictionary of the current room.
         next_room = self.current_room.exits[direction]
 
@@ -31,8 +76,8 @@ class Player():
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
             return False
-        
-        # déplacer le joueur vers la pièce suivante
+
+        # Move the player to the next room
 
         self.visited_rooms.append(self.current_room)
 
@@ -40,7 +85,7 @@ class Player():
         self.current_room = next_room
 
         print(self.current_room.get_long_description())
-        
+
         # Check room visit objectives
         self.quest_manager.check_room_objectives(self.current_room.name)
 
@@ -104,7 +149,6 @@ class Player():
             for reward in self.rewards:
                 print(f"  • {reward}")
             print()
-    
 
     # Define the get_history method.
     def get_history(self):
@@ -114,13 +158,11 @@ class Player():
         """
         if len(self.visited_rooms) == 0:
             return ""  # rien à afficher si on n’a visité qu’une pièce
-    
+
         history = "Vous avez déjà visité les pièces suivantes:\n"
-    
+
         # On ne liste pas la pièce actuelle, uniquement les précédentes
         for room in self.visited_rooms:
             history += f"  - {room.description}\n"
-    
-        return history
 
-    
+        return history

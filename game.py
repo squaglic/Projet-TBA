@@ -1,10 +1,11 @@
-# Description: Game class
+"""Module contenant la classe `Game`.
 
-# Debug mode
-DEBUG = False
+Ce module gère le jeu d'aventure complet, incluant l'initialisation du jeu,
+la configuration des salles, des personnages, des objets et des quêtes.
+Il gère également la boucle principale du jeu et l'interaction avec le joueur.
+"""
 
 # Import modules
-
 
 from pathlib import Path
 import sys
@@ -22,145 +23,372 @@ from character import Character
 from quest import Quest
 
 class Game:
+    """
+    Classe principale du jeu d'aventure.
+    
+    Gère l'ensemble du jeu, y compris les salles, les commandes, les joueurs
+    et l'état général du jeu.
+    
+    Attributes:
+        finished (bool): Indique si le jeu est terminé.
+        rooms (list): Liste de toutes les salles du jeu.
+        commands (dict): Dictionnaire des commandes disponibles.
+        player (Player): Le joueur actuel du jeu.
+    
+    Methods:
+        __init__(): Initialise le jeu.
+        setup(player_name): Configure le jeu avec toutes les salles et commandes.
+    """
 
-    # Constructor
     def __init__(self):
+        """
+        Initialise une nouvelle instance du jeu.
+        
+        Crée les structures de base : liste vide de salles, dictionnaire vide
+        de commandes et définit le joueur à None jusqu'à son création.
+        """
         self.finished = False
         self.rooms = []
         self.commands = {}
         self.player = None
-    
-    # Setup the game
+
     def setup(self, player_name=None):
+        """
+        Configure le jeu en initialisant toutes les salles, commandes et éléments.
         
+        Args:
+            player_name (str, optional): Le nom du joueur. Si None, un dialogue de
+                saisie apparaîtra pour demander le nom.
+        
+        Cette méthode :
+        - Configure toutes les commandes disponibles (help, quit, go, look, etc.)
+        - Crée toutes les salles du monde du jeu
+        - Ajoute les connexions entre les salles (exits)
+        - Ajoute les objets et personnages dans les salles
+        - Crée le joueur et l'initialise dans la première salle
+        """
+
 
         # Setup commands
 
-        help = Command("help", " : afficher cette aide", Actions.help, 0)
-        self.commands["help"] = help
-        quit = Command("quit", " : quitter le jeu", Actions.quit, 0)
-        self.commands["quit"] = quit
-        go = Command("go", " <direction> : se déplacer dans une direction cardinale (N, E, S, O)", Actions.go, 1)
-        self.commands["go"] = go
-        back = Command("back", " : revenir à la pièce précédente", Actions.back, 0)
-        self.commands["back"] = back
-        look = Command("look", " : afficher la liste des items présents dans la zone où se situe le joueur", Actions.look, 0)
-        self.commands["look"] = look
-        take = Command("take", " : prendre un Item présent dans la zone où se situe le joueur", Actions.take, 1)
-        self.commands["take"] = take
-        check = Command("check", " : vérifier l'inventaire du joueur", Actions.check, 0)
-        self.commands["check"] = check
-        drop = Command("drop", " : déposer un Item de l'inventaire du joueur dans la zone où il se situe", Actions.drop, 1)
-        self.commands["drop"] = drop
-        talk = Command("talk", " <nom> : parler à un personnage non-joueur (PNJ) présent dans la zone où se situe le joueur", Actions.talk, 1)
-        self.commands["talk"] = talk
-        
+        self.commands["help"] = Command(
+            "help",
+            " : afficher cette aide",
+            Actions.help,
+            0
+        )
+        self.commands["quit"] = Command(
+            "quit",
+            " : quitter le jeu",
+            Actions.quit,
+            0
+        )
+        self.commands["go"] = Command(
+            "go",
+            " <direction> : se déplacer (N, E, S, O)",
+            Actions.go,
+            1
+        )
+        self.commands["back"] = Command(
+            "back",
+            " : revenir à la pièce précédente",
+            Actions.back,
+            0
+        )
+        self.commands["look"] = Command(
+            "look",
+            " : afficher les items présents",
+            Actions.look,
+            0
+        )
+        self.commands["take"] = Command(
+            "take",
+            " : prendre un item présent",
+            Actions.take,
+            1
+        )
+        self.commands["check"] = Command(
+            "check",
+            " : vérifier l'inventaire",
+            Actions.check,
+            0
+        )
+        self.commands["drop"] = Command(
+            "drop",
+            " : déposer un item",
+            Actions.drop,
+            1
+        )
+        self.commands["talk"] = Command(
+            "talk",
+            " <nom> : parler à un personnage",
+            Actions.talk,
+            1
+        )
 
-        #Quests
-        self.commands["quests"] = Command("quests"
-                                          , " : afficher la liste des quêtes"
-                                          , Actions.quests
-                                          , 0)
-        self.commands["quest"] = Command("quest"
-                                         , " <titre> : afficher les détails d'une quête"
-                                         , Actions.quest
-                                         , 1)
-        self.commands["activate"] = Command("activate"
-                                            , " <titre> : activer une quête"
-                                            , Actions.activate
-                                            , 1)
-        self.commands["rewards"] = Command("rewards"
-                                           , " : afficher vos récompenses"
-                                           , Actions.rewards
-                                           , 0)
-        use = Command("use", " <objet> : utiliser un objet de votre inventaire", Actions.use, 1)
-        self.commands["use"] = use
-    
-        
+
+        #Setup quests
+        self.commands["quests"] = Command(
+            "quests",
+            " : afficher la liste des quêtes",
+            Actions.quests,
+            0
+        )
+        self.commands["quest"] = Command(
+            "quest",
+            " <titre> : afficher les détails d'une quête",
+            Actions.quest,
+            1
+        )
+        self.commands["activate"] = Command(
+            "activate",
+            " <titre> : activer une quête",
+            Actions.activate,
+            1
+        )
+        self.commands["rewards"] = Command(
+            "rewards",
+            " : afficher vos récompenses",
+            Actions.rewards,
+            0
+        )
+        self.commands["use"] = Command(
+            "use",
+            " <objet> : utiliser un objet",
+            Actions.use,
+            1
+        )
+
+
         # Setup rooms
 
-        Eldregrove = Room("Eldregrove","une forêt ancienne où les arbres semblent observer les voyageurs, et où la magie sauvage imprègne chaque souffle de vent.", "Eldregrove.png")
-        self.rooms.append(Eldregrove)
-        Verdenfall = Room("Verdenfall", "une ancienne couronne du royaume, ce château en ruines résonne encore des murmures d'un pouvoir oublié.", "Verdenfall.png")
-        self.rooms.append(Verdenfall)
-        Brunnhold = Room("Brunnhold", "un village partiellement ravagé, dont les habitants vivent dans une méfiance constante envers tout ce qui leur est étranger.", "Brunnhold.png")
-        self.rooms.append(Brunnhold)
-        Mireval = Room("Mireval", "un Hameau noyé dans une brume perpétuelle, marqué par une étrange épidémie que nul ne parvient à comprendre.", "Mireval.png")
-        self.rooms.append(Mireval)
-        Stonebridge = Room("Stonebridge", "une Forteresse-village robuste, dernier rempart organisé de l'humanité contre les ténèbres grandissantes.", "Stonebridge.png")
-        self.rooms.append(Stonebridge)
-        Dornhollow = Room("Dornhollow", "un village englouti par les marécages, où les habitants jurent entendre des voix sous la boue.", "Dornhollow.png")
-        self.rooms.append(Dornhollow)
-        Blackmere = Room("Blackmere", "un Hameau lacustre dont les pêcheurs disparaissent dans les eaux sombres.", "Blackmere.png")
-        self.rooms.append(Blackmere)
-        Grisepierre = Room("Grisepierre", "un Hameau minier hanté par un minerai étrange qui semble respirer.", "Grisepierre.png")
-        self.rooms.append(Grisepierre)
-        Val_Cendré = Room("Val-Cendré", "un village couvert d'une cendre éternelle, marqué par un incendie surnaturel.", "Val_Cendre.png")
-        self.rooms.append(Val_Cendré)
-        Ravenglade = Room("Ravenglade" , "un Hameau forestier envahi de corbeaux, où aucune naissance n'a eu lieu depuis des années.", "Ravenglade.png")
-        self.rooms.append(Ravenglade)
-        Sangrun = Room("Sangrun", "une grotte où résident les âmes tourmentées du village.", "Sangrun.png")
-        self.rooms.append(Sangrun)
+        eldregrove = Room(
+            "Eldregrove",
+            "une forêt ancienne où les arbres semblent observer les voyageurs.",
+            "Eldregrove.png"
+        )
+        self.rooms.append(eldregrove)
+        verdenfall = Room(
+            "Verdenfall",
+            "ancienne couronne du royaume, château en ruines.",
+            "Verdenfall.png"
+        )
+        self.rooms.append(verdenfall)
+        brunnhold = Room(
+            "Brunnhold",
+            "village partiellement ravagé par les combats.",
+            "Brunnhold.png"
+        )
+        self.rooms.append(brunnhold)
+        mireval = Room(
+            "Mireval",
+            "hameau noyé dans une brume perpétuelle.",
+            "Mireval.png"
+        )
+        self.rooms.append(mireval)
+        stonebridge = Room(
+            "Stonebridge",
+            "forteresse-village robuste, dernier rempart.",
+            "Stonebridge.png"
+        )
+        self.rooms.append(stonebridge)
+        dornhollow = Room(
+            "Dornhollow",
+            "village englouti par les marécages.",
+            "Dornhollow.png"
+        )
+        self.rooms.append(dornhollow)
+        blackmere = Room(
+            "Blackmere",
+            "hameau lacustre où les pêcheurs disparaissent.",
+            "Blackmere.png"
+        )
+        self.rooms.append(blackmere)
+        grisepierre = Room(
+            "Grisepierre",
+            "hameau minier hanté par un minerai étrange.",
+            "Grisepierre.png"
+        )
+        self.rooms.append(grisepierre)
+        val_cendre = Room(
+            "Val-Cendré",
+            "village couvert d'une cendre éternelle.",
+            "Val_Cendre.png"
+        )
+        self.rooms.append(val_cendre)
+        ravenglade = Room(
+            "Ravenglade",
+            "hameau forestier envahi de corbeaux.",
+            "Ravenglade.png"
+        )
+        self.rooms.append(ravenglade)
+        sangrun = Room(
+            "Sangrun",
+            "grotte où résident les âmes tourmentées.",
+            "Sangrun.png"
+        )
+        self.rooms.append(sangrun)
 
 
 
-        #Setup pnjs
-        guardian = Character("Gardien", "Un vieux gardien mystérieux", Brunnhold, ["Bienvenue voyageur, je suis le gardien de ce village.", "Attention aux ombres qui rôdent dans ces terres!"])
-        Brunnhold.characters.append(guardian)
-        messenger = Character("Messager", "Un messager essoufflé", Stonebridge, ["Les ténèbres avancent rapidement, nous devons rester vigilants.", "Avez-vous entendu parler de la malédiction de Mireval?", "Seul un vaillant guerrier atteindra le Château de Verdenfall."])
-        Stonebridge.characters.append(messenger)
+        # Setup pnjs
+        guardian = Character(
+            "Gardien",
+            "Un vieux gardien mystérieux",
+            brunnhold,
+            [
+                "Bienvenue voyageur, je suis le gardien.",
+                "Attention aux ombres qui rôdent!"
+            ]
+        )
+        brunnhold.characters.append(guardian)
+        messenger = Character(
+            "Messager",
+            "Un messager essoufflé",
+            stonebridge,
+            [
+                "Les ténèbres avancent, soyons vigilants.",
+                "Avez-vous entendu parler de Mireval?",
+                "Seul un vaillant guerrier atteindra Verdenfall."
+            ]
+        )
+        stonebridge.characters.append(messenger)
 
 
         # Create exits for rooms
 
-        # Bloquer le passage direct entre Forest et Tower :
-        # - forest.E ne mène plus à tower
-        # - tower.O ne mène plus à forest
-        Verdenfall.exits = {"N" : None , "E" : None, "S" : Sangrun , "O" : None }
-        Brunnhold.exits = {"N" : Dornhollow, "E" : Blackmere, "S" : Eldregrove , "O" : None }
-        Mireval.exits = {"N" : None, "E" : Sangrun, "S" : Stonebridge, "O" : None}
-        Dornhollow.exits = {"N" : Stonebridge, "E" : Val_Cendré, "S" : Brunnhold , "O" : None }
-        Sangrun.exits = {"N" : Verdenfall, "E" : None, "S" :Ravenglade  , "O" : Mireval}
-        Eldregrove.exits = {"N" : Brunnhold, "E" : None, "S" : None  , "O" : None}
-        Stonebridge.exits = {"N" : Mireval, "E" : None, "S" : Dornhollow  , "O" : None}
-        # Blackmere : passage à sens unique. On peut y aller depuis Brunnhold mais pas revenir en arrière.
-        Blackmere.exits = {"N" : Grisepierre, "E" : None, "S" : None  , "O" : None}
-        Grisepierre.exits = {"N" : None, "E" : None, "S" : Blackmere  , "O" : Ravenglade}
-        Val_Cendré.exits = {"N" : Ravenglade, "E" : None, "S" : None  , "O" : Dornhollow}
-        Ravenglade.exits = {"N" : Sangrun, "E" : Grisepierre, "S" : Val_Cendré  , "O" : None}
+        verdenfall.exits = {
+            "N": None,
+            "E": None,
+            "S": sangrun,
+            "O": None
+        }
+        brunnhold.exits = {
+            "N": dornhollow,
+            "E": blackmere,
+            "S": eldregrove,
+            "O": None
+        }
+        mireval.exits = {
+            "N": None,
+            "E": sangrun,
+            "S": stonebridge,
+            "O": None
+        }
+        dornhollow.exits = {
+            "N": stonebridge,
+            "E": val_cendre,
+            "S": brunnhold,
+            "O": None
+        }
+        sangrun.exits = {
+            "N": verdenfall,
+            "E": None,
+            "S": ravenglade,
+            "O": mireval
+        }
+        eldregrove.exits = {
+            "N": brunnhold,
+            "E": None,
+            "S": None,
+            "O": None
+        }
+        stonebridge.exits = {
+            "N": mireval,
+            "E": None,
+            "S": dornhollow,
+            "O": None
+        }
+        # Blackmere : passage à sens unique
+        blackmere.exits = {
+            "N": grisepierre,
+            "E": None,
+            "S": None,
+            "O": None
+        }
+        grisepierre.exits = {
+            "N": None,
+            "E": None,
+            "S": blackmere,
+            "O": ravenglade
+        }
+        val_cendre.exits = {
+            "N": ravenglade,
+            "E": None,
+            "S": None,
+            "O": dornhollow
+        }
+        ravenglade.exits = {
+            "N": sangrun,
+            "E": grisepierre,
+            "S": val_cendre,
+            "O": None
+        }
         # Setup player and starting room
 
         if player_name is None:
             player_name = input("\nEntrez votre nom: ")
         self.player = Player(player_name)
-        self.player.current_room = Eldregrove
+        self.player.current_room = eldregrove
 
-        #Setup item
-        épée = Item("épée", "Épée des Ténèbres", 2)
-        Masque_anti_brume = Item("masque", "Masque anti-brume", 1)
-        bouclier = Item("bouclier", "Bouclier de protection magique", 3)
-        âme_mineur = Item("âme_mineur", "Âme du mineur", 1)
-        âme_pêcheur = Item("âme_pêcheur", "Âme du pêcheur", 1)
-        âme_seigneur = Item("âme_seigneur", "Âme du Seigneur", 2)
-        poison = Item("poison", "Poison de vérité", 1)
+        # Setup items
+        sword = Item(
+            "epee",
+            "Epee des Tenebres",
+            2
+        )
+        mask = Item(
+            "masque",
+            "Masque anti-brume",
+            1
+        )
+        shield = Item(
+            "bouclier",
+            "Bouclier de protection",
+            3
+        )
+        soul_miner = Item(
+            "ame_mineur",
+            "Ame du mineur",
+            1
+        )
+        soul_fisher = Item(
+            "ame_pecheur",
+            "Ame du pecheur",
+            1
+        )
+        soul_lord = Item(
+            "ame_seigneur",
+            "Ame du Seigneur",
+            2
+        )
+        poison = Item(
+            "poison",
+            "Poison de verite",
+            1
+        )
 
-
-        #Setup item location
-        Brunnhold.inventory["épée"] = épée
-        Mireval.inventory["masque"] = Masque_anti_brume
-        Blackmere.inventory["bouclier"] = bouclier
-        Grisepierre.inventory["âme_mineur"] = âme_mineur
-        Blackmere.inventory["âme_pêcheur"] = âme_pêcheur
-        Mireval.inventory["âme_seigneur"] = âme_seigneur
-        Verdenfall.inventory["poison"] = poison
+        # Setup items location
+        brunnhold.inventory["epee"] = sword
+        mireval.inventory["masque"] = mask
+        blackmere.inventory["bouclier"] = shield
+        grisepierre.inventory["ame_mineur"] = soul_miner
+        blackmere.inventory["ame_pecheur"] = soul_fisher
+        mireval.inventory["ame_seigneur"] = soul_lord
+        verdenfall.inventory["poison"] = poison
 
         # Setup quests
         self._setup_quests()
-        
 
 
-    # Play the game
     def play(self):
+        """
+        Lance la boucle principale du jeu en mode console.
+
+        Effectue le setup initial, affiche le message de bienvenue,
+        puis continue jusqu'à la victoire ou la défaite du joueur.
+        """
+
         self.setup()
         self.print_welcome()
         # Initialiser la flag used_poison du joueur
@@ -180,8 +408,17 @@ class Game:
             self.process_command(input("> "))
         return None
 
-    # Process the command entered by the player
     def process_command(self, command_string) -> None:
+        """
+        Traite la commande entrée par le joueur.
+
+        Analyse la chaîne de commande, vérifie si la commande existe,
+        l'exécute si valide, affiche une erreur sinon, puis déplace
+        tous les personnages non-joueurs.
+
+        Args:
+            command_string (str): La chaîne de commande entrée par le joueur.
+        """
 
         # Split the command string into a list of words
         list_of_words = command_string.split(" ")
@@ -190,12 +427,14 @@ class Game:
 
         # If the command is not recognized, print an error message
         if command_word not in self.commands.keys():
-            print(f"\nCommande '{command_word}'  non reconnue. Entrez 'help' pour voir la liste des commandes disponibles.\n")
+            msg = (f"\nCommande '{command_word}' non reconnue. "
+                   "Entrez 'help' pour voir les commandes disponibles.\n")
+            print(msg)
         # If the command is recognized, execute it
         else:
             command = self.commands[command_word]
             command.action(self, list_of_words, command.number_of_parameters)
-        
+
         # Déplacer tous les personnages non-joueurs après chaque commande
         self.move_characters()
 
@@ -209,12 +448,12 @@ class Game:
         """
         # Check if all quests are completed
         all_quests_completed = all(quest.is_completed for quest in self.player.quest_manager.quests)
-        
+
         # Check if player has used poison at Verdenfall
         used_poison_at_verdenfall = self.player.used_poison
-        
+
         return all_quests_completed and used_poison_at_verdenfall
-    
+
     def loose(self):
         """
         Check if the player has lost the game.
@@ -236,29 +475,33 @@ class Game:
 
         dark_sword_quest = Quest(
             title="Récupérer l'Épée des Ténèbres",
-            description="Retrouvez et récupérez l'Épée des Ténèbres cachée quelque part dans le monde.",
+            description="Retrouvez l'Épée des Ténèbres.",
             objectives=["prendre épée"],
             reward="Épée des Ténèbres"
         )
 
         messenger_quest = Quest(
             title="Parler avec le Messager",
-            description="Allez à Stonebridge et parlez avec le Messager pour en savoir plus sur les ténèbres.",
+            description="Allez à Stonebridge et parlez au Messager.",
             objectives=["parler avec Messager"],
             reward="Information précieuse"
         )
 
         verdenfall_quest = Quest(
             title="Atteindre Verdenfall",
-            description="Trouvez votre chemin jusqu'au Château de Verdenfall, l'ancienne couronne du royaume.",
-            objectives=["Visiter Château de Verdenfall"],
+            description="Trouvez votre chemin jusqu'à Verdenfall.",
+            objectives=["Visiter Verdenfall"],
             reward="Accès à Verdenfall"
         )
 
         souls_quest = Quest(
             title="Récupérer les âmes",
-            description="Collectez les trois âmes perdues dispersées dans le monde.",
-            objectives=["prendre âme_mineur", "prendre âme_pêcheur", "prendre âme_seigneur"],
+            description="Collectez les trois âmes perdues.",
+            objectives=[
+                "prendre âme_mineur",
+                "prendre âme_pêcheur",
+                "prendre âme_seigneur"
+            ],
             reward="Pouvoir des âmes"
         )
 
@@ -276,34 +519,38 @@ class Game:
         Affiche un message si un personnage se déplace dans ou hors de la salle du joueur.
         """
         player_room = self.player.current_room
-        
+
         # Parcourir toutes les salles pour trouver les personnages
         for room in self.rooms:
-            # Créer une copie de la liste des personnages pour éviter les problèmes de modification pendant l'itération
             characters_in_room = list(room.characters)
             for character in characters_in_room:
                 old_room = character.current_room
                 # Déplacer le personnage
                 moved = character.move()
-                
+
                 if moved:
                     new_room = character.current_room
                     # Retirer le personnage de l'ancienne salle
                     old_room.characters.remove(character)
                     # Ajouter le personnage à la nouvelle salle
                     new_room.characters.append(character)
-                    
+
                     # Afficher un message si le joueur est concerné
                     if old_room == player_room:
                         print(f"\n{character.name} quitte la salle.\n")
                     elif new_room == player_room:
                         print(f"\n{character.name} entre dans la salle.\n")
 
-    # Print the welcome message
     def print_welcome(self):
+        """
+        Affiche le message de bienvenue et la description de la salle initiale.
+
+        Affiche le nom du joueur, les instructions d'aide et la description
+        détaillée de la salle de départ.
+        """
         print(f"\nBienvenue {self.player.name} dans ce jeu d'aventure !")
         print("Entrez 'help' si vous avez besoin d'aide.")
-        
+
         print(self.player.current_room.get_long_description())
 
 
@@ -535,7 +782,7 @@ class GameGUI(tk.Tk):
         self.game.process_command(command)
         # Update room image after command (in case player moved)
         self._update_room_image()
-        
+
         # Vérifier les conditions de victoire et défaite
         if self.game.win():
             print("\n🏆 Vous avez sauvé le royaume ! Victoire !\n")
@@ -543,7 +790,7 @@ class GameGUI(tk.Tk):
         elif self.game.loose():
             print("\n☠️  Vous avez perdu... Le poison vous a vaincu.\n")
             self.game.finished = True
-        
+
         if self.game.finished:
             # Disable further input and schedule close (brief delay to show farewell)
             self.entry.configure(state="disabled")
@@ -574,7 +821,7 @@ def main():
         # Fallback to CLI if GUI fails (e.g., no DISPLAY, Tkinter not available)
         print(f"GUI indisponible ({e}). Passage en mode console.")
         Game().play()
-    
+
 
 if __name__ == "__main__":
     main()
