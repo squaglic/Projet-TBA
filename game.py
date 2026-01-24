@@ -476,7 +476,7 @@ class Game:
         dark_sword_quest = Quest(
             title="Récupérer l'Épée des Ténèbres",
             description="Retrouvez l'Épée des Ténèbres.",
-            objectives=["prendre épée"],
+            objectives=["prendre epee"],
             reward="Épée des Ténèbres"
         )
 
@@ -498,9 +498,9 @@ class Game:
             title="Récupérer les âmes",
             description="Collectez les trois âmes perdues.",
             objectives=[
-                "prendre âme_mineur",
-                "prendre âme_pêcheur",
-                "prendre âme_seigneur"
+                "prendre ame_mineur",
+                "prendre ame_pecheur",
+                "prendre ame_seigneur"
             ],
             reward="Pouvoir des âmes"
         )

@@ -35,7 +35,8 @@ class Actions:
         use(game, list_of_words, number_of_parameters): Utilise un objet.
     """
 
-    def go(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def go(game, list_of_words, number_of_parameters):
         """
         Move the player in the direction specified by the parameter.
         The parameter must be a cardinal direction (N, E, S, O).
@@ -88,7 +89,8 @@ class Actions:
                 print(history)
         return moved
 
-    def quit(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def quit(game, list_of_words, number_of_parameters):
         """
         Quit the game.
 
@@ -127,7 +129,8 @@ class Actions:
         game.finished = True
         return True
 
-    def help(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def help(game, list_of_words, number_of_parameters):
         """
         Print the list of available commands.
         
@@ -167,7 +170,8 @@ class Actions:
         print()
         return True
 
-    def back(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def back(game, list_of_words, number_of_parameters):
         """
         revenir à la pièce précédente (retour en arrière).
 
@@ -214,7 +218,8 @@ class Actions:
             print(history)
         return True
 
-    def look(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def look(game, list_of_words, number_of_parameters):
         """
         Regarder autour de soi dans la pièce actuelle.
         Affiche la description de la salle, les items et les personnages présents.
@@ -252,7 +257,8 @@ class Actions:
         return True
 
 
-    def take(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def take(game, list_of_words, number_of_parameters):
         """
         Prendre un item présent dans la room actuelle.
 
@@ -297,7 +303,8 @@ class Actions:
 
         return True
 
-    def check(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def check(game, list_of_words, number_of_parameters):
         """
         Vérifier l'inventaire du joueur.
 
@@ -329,7 +336,8 @@ class Actions:
         print(f"\nPoids total de l'inventaire: {player.current_weight}\n")
         return True
 
-    def drop(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def drop(game, list_of_words, number_of_parameters):
         """
         Lâcher un item de l'inventaire du joueur dans la room actuelle.
 
@@ -370,7 +378,8 @@ class Actions:
         print(f"\nVous avez lâché l'objet '{item_name}'.\n")
         return True
 
-    def talk(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def talk(game, list_of_words, number_of_parameters):
         """
         Parler à un personnage non-joueur (PNJ) présent dans la salle actuelle.
 
@@ -414,7 +423,8 @@ class Actions:
 
         return True
 
-    def quests(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def quests(game, list_of_words, number_of_parameters):
         """
         Show all quests and their status.
         
@@ -607,7 +617,8 @@ class Actions:
         game.player.show_rewards()
         return True
 
-    def use(self, game, list_of_words, number_of_parameters):
+    @staticmethod
+    def use(game, list_of_words, number_of_parameters):
         """
         Utiliser un objet de l'inventaire du joueur.
 
